@@ -1,5 +1,6 @@
 // TODO: Include packages needed for this application
 const inquirer = require("inquirer");
+const fs = require("fs");
 const generateMarkdown = require("./utils/generateMarkdown");
 
 // TODO: Create an array of questions for user input. Use instructor example to reformat question type and message
@@ -17,14 +18,10 @@ const questions = [
     name: "description",
   },
   {
-    type: "input",
+    type: "list",
     message: "What kind of license should your project have?",
     name: "license",
-  },
-  {
-    type: "input",
-    message: "What command should be run to install dependencies?",
-    name: "commandDependencies",
+    choices: ["Apache", "MIT", "IBM", "Mozilla", "No License"],
   },
   {
     type: "input",
@@ -41,11 +38,27 @@ const questions = [
     message: "What does the user need to know about contributing to the repo?",
     name: "contribution",
   },
+  {
+    type: "input",
+    message:
+      "What are the steps required to install your project? Provide a step-by-step description of how to get the development environment running.",
+    name: "installation",
+  },
+  {
+    type: "input",
+    message:
+      "Provide instructions and examples for use. Include screenshots as needed.",
+    name: "usage",
+  },
 ];
 
 // TODO: Create a function to write README file
-function writeToFile(fileName, data) {
+function createReadMe(fileName, data) {
   // use fs module
+  fs.writeFile(fileName, data, (err) => {
+    if (err) throw err;
+    console.log("file created");
+  });
 }
 
 // TODO: Create a function to initialize app
@@ -54,7 +67,7 @@ function init() {
     const MarkdownString = generateMarkdown(answers);
     console.log(MarkdownString);
     // write generatedReadMe to file
-    //writeToFile(generatedReadMe);
+    createReadMe("READMESample.md", MarkdownString);
   });
   //console.log("this is after the prompt");
 }
